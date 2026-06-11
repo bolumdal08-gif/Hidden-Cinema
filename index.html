@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hidden Cinema</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<header>
+    <h1>🎬 Hidden Cinema</h1>
+    <p>당신이 몰랐던 한국 영화를 발견하세요</p>
+</header>
+
+<section class="search-section">
+
+    <h2>영화 추천 받기</h2>
+
+    <select id="genre">
+        <option value="">장르 선택</option>
+        <option>드라마</option>
+        <option>액션</option>
+        <option>코미디</option>
+        <option>공포</option>
+        <option>SF</option>
+    </select>
+
+    <input
+        type="text"
+        id="keyword"
+        placeholder="키워드 입력 (예: 성장, 가족, 청춘)"
+    >
+
+    <button onclick="recommendMovie()">
+        추천 받기
+    </button>
+
+</section>
+
+<section id="results"></section>
+
+<script src="script.js"></script>
+
+</body>
+</html>
