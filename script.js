@@ -131,6 +131,22 @@ html=`
 
 result.forEach(movie=>{
 
+let keywords =
+movie["키워드"] || "";
+
+let firstKeyword =
+keywords.split(",")[0]?.trim() || "영화";
+
+let reason = "";
+
+if(mood){
+    reason =
+    `선택한 '${mood}' 분위기와 관련된 '${firstKeyword}' 요소가 포함되어 있어 추천합니다.`;
+}else{
+    reason =
+    `'${firstKeyword}' 키워드를 중심으로 추천된 작품입니다.`;
+}
+
 html += `
 
 <div class="movie-card">
@@ -143,10 +159,15 @@ ${movie["제명"] || "제목 없음"}
 📅 ${movie["제작년도"] || "-"}<br>
 🌏 ${movie["제작국가"] || "-"}<br>
 🎭 ${movie["장르"] || "-"}<br>
-⏱ ${movie["상영시간"] || "-"}분
+⏱ ${movie["상영시간"] || "-"}분<br>
+🏢 ${movie["참여사명"] || "-"}
 </div>
 
 <p>
+<div class="info">
+🏷 키워드<br>
+${movie["키워드"] || "정보 없음"}
+</div>
 ${(movie["줄거리"] || "")
 .substring(0,350)}
 ...
@@ -154,10 +175,8 @@ ${(movie["줄거리"] || "")
 
 <div class="reason">
 💡 추천 이유<br>
-선택한 "${mood}" 취향과
-가장 유사한 작품입니다.
+${reason}
 </div>
-
 </div>
 
 `;
