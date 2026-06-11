@@ -1,95 +1,171 @@
 let movies = [];
 
-fetch("영화상세정보(통합)_1129.csv")
-  .then(response => response.text())
-  .then(data => {
+Papa.parse("영화상세정보(통합)_1129.csv",{
 
-    const rows = data.split("\n");
+download:true,
+header:true,
+skipEmptyLines:true,
 
-    const headers = rows[0].split(",");
+complete:function(results){
 
-    const titleIndex =
-      headers.findIndex(h => h.includes("제명"));
+movies = results.data;
 
-    const genreIndex =
-      headers.findIndex(h => h.includes("장르"));
+const genreSet = new Set();
 
-    const storyIndex =
-      headers.findIndex(h => h.includes("줄거리"));
+movies.forEach(movie=>{
 
-    rows.slice(1).forEach(row => {
+const genre =
+movie["장르"] || "";
 
-      const cols = row.split(",");
+genre
+.split(",")
+.forEach(g=>{
 
-      if(cols.length > titleIndex){
+if(g.trim()){
+genreSet.add(g.trim());
+}
 
-        movies.push({
-          title: cols[titleIndex] || "",
-          genre: cols[genreIndex] || "",
-          story: cols[storyIndex] || ""
-        });
+});
 
-      }
+});
 
-    });
+const genreSelect =
+document.getElementById("genre");
 
-    console.log("영화 수:", movies.length);
+[...genreSet]
+.sort()
+.forEach(g=>{
 
-  });
+const option =
+document.createElement("option");
 
+option.value = g;
+option.textContent = g;
+
+genreSelect.appendChild(option);
+
+});
+
+console.log(
+`${movies.length}개 영화 로드 완료`
+);
+
+}
+
+});
 function recommendMovie(){
 
-  const genre =
-    document.getElementById("genre").value;
+const mood =
+document.getElementById("mood").value;
 
-  const keyword =
-    document.getElementById("keyword")
-      .value
-      .trim();
+const genre =
+document.getElementById("genre").value;
 
-  let result = movies.filter(movie => {
+const runtime =
+document.getElementById("runtime").value;
 
-    const genreMatch =
-      !genre ||
-      movie.genre.includes(genre);
+let result =
+movies.filter(movie=>{
 
-    const keywordMatch =
-      !keyword ||
-      movie.story.includes(keyword);
+let score = 0;
 
-    return genreMatch && keywordMatch;
+const keyword =
+(movie["키워드"] || "") +
+(movie["줄거리"] || "");
 
-  });
+if(mood && keyword.includes(mood))
+score += 3;
 
-  result = result.slice(0, 12);
+if(
+genre &&
+(movie["장르"] || "")
+.includes(genre)
+)
+score += 5;
 
-  let html = "";
+const time =
+Number(movie["상영시간"]);
 
-  if(result.length === 0){
+if(runtime==="short" && time<=60)
+score += 2;
 
-    html = `
-      <div class="movie-card">
-        <h3>검색 결과 없음</h3>
-        <p>조건에 맞는 영화를 찾지 못했습니다.</p>
-      </div>
-    `;
+if(runtime==="middle" &&
+time>60 &&
+time<=120)
+score += 2;
 
-  }else{
+if(runtime==="long" &&
+time>120)
+score += 2;
 
-    result.forEach(movie => {
+movie._score = score;
 
-      html += `
-        <div class="movie-card">
-          <h3>${movie.title}</h3>
-          <p><strong>장르</strong> : ${movie.genre}</p>
-          <p>${movie.story.substring(0,200)}...</p>
-        </div>
-      `;
+return score > 0;
 
-    });
+});
 
-  }
+result.sort(
+(a,b)=>b._score-a._score
+);
 
-  document.getElementById("results")
-    .innerHTML = html;
+result = result.slice(0,12);
+
+displayResults(result,mood);
+
+}
+function displayResults(result,mood){
+
+let html = "";
+
+if(result.length===0){
+
+html=`
+<div class="movie-card">
+<h3>추천 결과 없음</h3>
+<p>다른 조건을 선택해보세요.</p>
+</div>
+`;
+
+}else{
+
+result.forEach(movie=>{
+
+html += `
+
+<div class="movie-card">
+
+<h3>
+${movie["제명"] || "제목 없음"}
+</h3>
+
+<div class="info">
+📅 ${movie["제작년도"] || "-"}<br>
+🌏 ${movie["제작국가"] || "-"}<br>
+🎭 ${movie["장르"] || "-"}<br>
+⏱ ${movie["상영시간"] || "-"}분
+</div>
+
+<p>
+${(movie["줄거리"] || "")
+.substring(0,350)}
+...
+</p>
+
+<div class="reason">
+💡 추천 이유<br>
+선택한 "${mood}" 취향과
+가장 유사한 작품입니다.
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+document.getElementById("results")
+.innerHTML = html;
+
 }
