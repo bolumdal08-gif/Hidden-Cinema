@@ -1,3 +1,4 @@
+console.log("스크립트 실행됨");
 let movies = [];
 
 Papa.parse("영화상세정보(통합)_1129.csv",{
