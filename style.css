@@ -1,0 +1,92 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#141414;
+    color:white;
+    font-family:Arial, sans-serif;
+}
+
+header{
+    text-align:center;
+    padding:50px 20px;
+    background:linear-gradient(to bottom,#000,#141414);
+}
+
+header h1{
+    color:#e50914;
+    font-size:3rem;
+    margin-bottom:10px;
+}
+
+header p{
+    color:#ccc;
+}
+
+.search-section{
+    width:90%;
+    max-width:700px;
+    margin:30px auto;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.search-section h2{
+    text-align:center;
+}
+
+select,
+input{
+    padding:15px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+}
+
+button{
+    padding:15px;
+    border:none;
+    border-radius:8px;
+    background:#e50914;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.03);
+}
+
+#results{
+    width:90%;
+    margin:40px auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.movie-card{
+    background:#222;
+    border-radius:12px;
+    padding:20px;
+    transition:0.3s;
+}
+
+.movie-card:hover{
+    transform:translateY(-5px);
+}
+
+.movie-card h3{
+    color:#e50914;
+    margin-bottom:10px;
+}
+
+.movie-card p{
+    margin-bottom:8px;
+    line-height:1.5;
+}
