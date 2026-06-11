@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hidden Cinema</title>
@@ -10,36 +11,38 @@
 </head>
 <body>
 
-<header>
-    <h1>🎬 Hidden Cinema</h1>
-    <p>당신이 몰랐던 한국 영화를 발견하세요</p>
-</header>
-
 <section class="search-section">
 
-    <h2>영화 추천 받기</h2>
+<h2>취향 설문</h2>
 
-    <select id="genre">
-        <option value="">장르 선택</option>
-        <option>드라마</option>
-        <option>액션</option>
-        <option>코미디</option>
-        <option>공포</option>
-        <option>SF</option>
-    </select>
+<select id="mood">
+<option value="">원하는 분위기</option>
+<option>감동</option>
+<option>청춘</option>
+<option>성장</option>
+<option>가족</option>
+<option>우정</option>
+<option>사회</option>
+<option>힐링</option>
+<option>긴장감</option>
+</select>
 
-    <input
-        type="text"
-        id="keyword"
-        placeholder="키워드 입력 (예: 성장, 가족, 청춘)"
-    >
+<select id="genre">
+<option value="">장르 선택</option>
+</select>
 
-    <button onclick="recommendMovie()">
-        추천 받기
-    </button>
+<select id="runtime">
+<option value="">상영시간</option>
+<option value="short">60분 이하</option>
+<option value="middle">60~120분</option>
+<option value="long">120분 이상</option>
+</select>
+
+<button onclick="recommendMovie()">
+추천 받기
+</button>
 
 </section>
-
 <section id="results"></section>
 
 <script src="script.js"></script>
